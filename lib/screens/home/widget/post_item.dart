@@ -13,6 +13,8 @@ class PostItem extends StatefulWidget {
 }
 
 class _PostItemState extends State<PostItem> {
+  bool isLiked = false;
+  bool isSaved = false;
   final PageController _pageController = PageController();
   final List<String> _imagePaths = [
     'images/post_1.jpg',
@@ -113,13 +115,34 @@ class _PostItemState extends State<PostItem> {
           padding: EdgeInsets.all(12.w),
           child: Row(
             children: [
-              Icon(CupertinoIcons.heart),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isLiked = !isLiked;
+                  });
+                },
+                child: Icon(
+                  isLiked ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+                  color: isLiked ? Colors.red : Colors.black,
+                ),
+              ),
               SizedBox(width: 10.w),
               Icon(CupertinoIcons.chat_bubble),
               SizedBox(width: 10.w),
               Icon(CupertinoIcons.paperplane),
               Spacer(),
-              Icon(CupertinoIcons.bookmark),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isSaved = !isSaved;
+                  });
+                },
+                child: Icon(
+                  isSaved
+                      ? CupertinoIcons.bookmark_fill
+                      : CupertinoIcons.bookmark,
+                ),
+              ),
             ],
           ),
         ),

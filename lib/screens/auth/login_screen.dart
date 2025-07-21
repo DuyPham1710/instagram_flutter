@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:instagram_flutter/providers/auth_provider.dart';
+import 'package:instagram_flutter/providers/user_provider.dart';
 import 'package:instagram_flutter/screens/bottom_navigation/bottom_navigation.dart';
 import 'package:instagram_flutter/screens/home/home_screen.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback show;
@@ -81,10 +84,24 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: InkWell(
         onTap: () async {
-          Navigator.push(
+          final authProvider = Provider.of<AuthProvider>(
             context,
-            MaterialPageRoute(builder: (context) => BottomNavigation()),
+            listen: false,
           );
+
+          await authProvider.login(email.text, password.text);
+
+          final token = authProvider.token;
+
+          if (token != null) {
+            print("Login successful with token: $token");
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => BottomNavigation()),
+            );
+          }
+
           // await Authentication()
           //     .Login(email: email.text, password: password.text);
         },

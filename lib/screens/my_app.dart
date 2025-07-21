@@ -3,9 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_flutter/screens/auth/login_screen.dart';
 import 'package:instagram_flutter/screens/bottom_navigation/bottom_navigation.dart';
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -15,12 +20,12 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(debugShowCheckedModeBanner: false, home: child);
       },
-      // child: LoginScreen(() {
-      //   print("Sign up tapped");
-      // }),
-      child: BottomNavigation(
-        // child: HomeScreen(),
-      ),
+      child: LoginScreen(() {
+        print("Sign up tapped");
+      }),
+      //   child: BottomNavigation(
+      // child: HomeScreen(),
+      //),
     );
   }
 }
