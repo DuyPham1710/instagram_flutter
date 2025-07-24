@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_flutter/providers/auth_provider.dart';
-import 'package:instagram_flutter/providers/user_provider.dart';
 import 'package:instagram_flutter/screens/bottom_navigation/bottom_navigation.dart';
-import 'package:instagram_flutter/screens/home/home_screen.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -89,16 +87,22 @@ class _LoginScreenState extends State<LoginScreen> {
             listen: false,
           );
 
-          await authProvider.login(email.text, password.text);
+          final success = await authProvider.login(email.text, password.text);
 
           final token = authProvider.token;
 
-          if (token != null) {
+          if (success && token != null) {
             print("Login successful with token: $token");
 
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => BottomNavigation()),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Login failed. Please check your credentials.'),
+              ),
             );
           }
 

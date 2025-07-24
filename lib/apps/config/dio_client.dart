@@ -1,14 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:instagram_flutter/providers/auth_provider.dart';
-import 'package:instagram_flutter/repositories/auth_repository.dart';
-import 'package:instagram_flutter/services/api/auth_api_service.dart';
 
 class DioClient {
   static final DioClient _instance = DioClient._internal();
   factory DioClient() => _instance;
 
   late Dio dio;
-  String? token;
+  // String? token;
 
   DioClient._internal() {
     BaseOptions options = BaseOptions(
@@ -27,9 +24,9 @@ class DioClient {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          if (token != null) {
-            options.headers['Authorization'] = 'Bearer $token';
-          }
+          // if (token != null) {
+          //   options.headers['Authorization'] = 'Bearer $token';
+          // }
           return handler.next(options);
         },
         onResponse: (response, handler) {
@@ -44,7 +41,8 @@ class DioClient {
     );
   }
 
-  void updateToken(String newToken) {
-    token = newToken;
+  void updateToken(String token) {
+    // token = newToken;
+    dio.options.headers['Authorization'] = 'Bearer $token';
   }
 }

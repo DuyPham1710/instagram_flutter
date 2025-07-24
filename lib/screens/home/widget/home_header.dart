@@ -18,7 +18,11 @@ class HomeHeader extends StatelessWidget {
             children: [
               IconButton(
                 padding: EdgeInsets.only(left: 15.w),
-                icon: Icon(CupertinoIcons.heart, color: Colors.black, size: 24),
+                icon: Icon(
+                  CupertinoIcons.heart,
+                  color: Colors.black,
+                  size: 24.h,
+                ),
                 onPressed: () {},
               ),
               IconButton(
@@ -26,7 +30,7 @@ class HomeHeader extends StatelessWidget {
                 icon: Icon(
                   CupertinoIcons.chat_bubble_text,
                   color: Colors.black,
-                  size: 24,
+                  size: 24.h,
                 ),
                 onPressed: () {},
               ),

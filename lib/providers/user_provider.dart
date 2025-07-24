@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/dto/user_response_dto.dart';
-import 'package:instagram_flutter/models/User.dart';
 import 'package:instagram_flutter/repositories/user_repository.dart';
 
 class UserProvider extends ChangeNotifier {

@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_flutter/providers/auth_provider.dart';
 import 'package:instagram_flutter/providers/user_provider.dart';
 import 'package:instagram_flutter/screens/home/home_screen.dart';
+import 'package:instagram_flutter/screens/newPost/new_post_screen.dart';
 import 'package:instagram_flutter/screens/profile/profile_screen.dart';
+import 'package:instagram_flutter/screens/reels/reels_screen.dart';
 import 'package:instagram_flutter/screens/search/search_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +22,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
     context.read<UserProvider>().fetchUserProfile();
   }
 
-  List<Widget> pages = [HomeScreen(), SearchScreen(), ProfileScreen()];
+  List<Widget> pages = [
+    HomeScreen(),
+    SearchScreen(),
+    NewPostScreen(),
+    ReelsScreen(),
+    ProfileScreen(),
+  ];
   var indexPage = 0;
 
   @override
@@ -32,6 +39,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         activeIcon: Icon(CupertinoIcons.house_fill), // <- icon đen khi chọn
         label: '',
       ),
+
       BottomNavigationBarItem(
         icon: Icon(
           CupertinoIcons.search,
@@ -41,20 +49,24 @@ class _BottomNavigationState extends State<BottomNavigation> {
         activeIcon: Icon(CupertinoIcons.search, size: 24, color: Colors.black),
         label: '',
       ),
+
       BottomNavigationBarItem(
-        icon: Icon(CupertinoIcons.add_circled),
-        activeIcon: Icon(CupertinoIcons.add_circled_solid),
+        icon: Icon(CupertinoIcons.plus_app),
+        activeIcon: Icon(CupertinoIcons.plus_app_fill),
         label: '',
       ),
+
       BottomNavigationBarItem(
         icon: Icon(CupertinoIcons.play_rectangle),
         activeIcon: Icon(CupertinoIcons.play_rectangle_fill),
         label: '',
       ),
+
       BottomNavigationBarItem(
         icon: Consumer<UserProvider>(
           builder: (context, userProvider, _) {
             final avatarUrl = userProvider.user?.avatarUrl;
+
             return CircleAvatar(
               radius: 12,
               backgroundImage: avatarUrl != null
@@ -66,6 +78,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         activeIcon: Consumer<UserProvider>(
           builder: (context, userProvider, _) {
             final avatarUrl = userProvider.user?.avatarUrl;
+
             return CircleAvatar(
               radius: 12,
               backgroundColor: Colors.black,

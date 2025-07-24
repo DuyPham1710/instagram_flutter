@@ -12,7 +12,7 @@ class AuthProvider extends ChangeNotifier {
 
   String? get token => _token;
 
-  Future<void> login(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     try {
       _token = await repository.loginUser(email, password);
 
@@ -23,8 +23,10 @@ class AuthProvider extends ChangeNotifier {
       // await prefs.setString('accessToken', _token!);
 
       notifyListeners();
+      return true;
     } catch (e) {
       print('Login failed: $e');
+      return false;
     }
   }
 }
