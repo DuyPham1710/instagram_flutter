@@ -12,4 +12,8 @@ class ApiPath {
   static const String user = '/users';
   static const String userProfile = '/users/profile';
   static const String search = '/users/search';
+  static const String allUsersOther = '/users/other';
+
+  // Api paths for posts
+  static const String getAllPostsByUser = '/post';
 }

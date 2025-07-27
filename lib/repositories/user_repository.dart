@@ -15,4 +15,16 @@ class UserRepository {
 
     return UserResponseDto.fromJson(response.data);
   }
+
+  Future<List<UserResponseDto>> getAllUsersOther() async {
+    final response = await userApiService.getAllUsersOther();
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch all users: ${response.data}');
+    }
+
+    return (response.data as List)
+        .map((user) => UserResponseDto.fromJson(user))
+        .toList();
+  }
 }

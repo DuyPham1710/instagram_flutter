@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class ProfileActions extends StatefulWidget {
-  const ProfileActions({super.key});
+class ProfileActions extends StatelessWidget {
+  final VoidCallback toggleSuggest;
+  final ValueNotifier<bool> isShowSuggest;
 
-  @override
-  State<ProfileActions> createState() => _ProfileActionsState();
-}
-
-class _ProfileActionsState extends State<ProfileActions> {
-  bool isShowSuggest = true;
+  const ProfileActions({
+    super.key,
+    required this.toggleSuggest,
+    required this.isShowSuggest,
+  });
 
   void showToast(String message) {
     Fluttertoast.showToast(
@@ -73,29 +73,29 @@ class _ProfileActionsState extends State<ProfileActions> {
             ),
           ),
           SizedBox(width: 8.w),
-          Container(
-            alignment: Alignment.center,
-            height: 36.h,
-            width: 36.w,
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(6.r),
-            ),
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  isShowSuggest = !isShowSuggest;
-                });
-              },
-              child: Icon(
-                isShowSuggest
-                    ? CupertinoIcons.person_add_solid
-                    : CupertinoIcons.person_add,
-                // CupertinoIcons.person_add_solid,
-                size: 22.h,
-                color: Colors.black,
-              ),
-            ),
+          ValueListenableBuilder<bool>(
+            valueListenable: isShowSuggest,
+            builder: (context, show, _) {
+              return Container(
+                alignment: Alignment.center,
+                height: 36.h,
+                width: 36.w,
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(6.r),
+                ),
+                child: InkWell(
+                  onTap: toggleSuggest,
+                  child: Icon(
+                    show
+                        ? CupertinoIcons.person_add_solid
+                        : CupertinoIcons.person_add,
+                    size: 22.h,
+                    color: Colors.black,
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),

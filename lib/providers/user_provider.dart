@@ -19,4 +19,14 @@ class UserProvider extends ChangeNotifier {
       print('Failed to fetch user profile: $e');
     }
   }
+
+  Future<List<UserResponseDto>> fetchAllUsersOther() async {
+    try {
+      final users = await repository.getAllUsersOther();
+      return users;
+    } catch (e) {
+      print('Failed to fetch all users: $e');
+      return [];
+    }
+  }
 }

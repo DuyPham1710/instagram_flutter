@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/providers/post_provider.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_actions.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_header.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_info.dart';
+import 'package:instagram_flutter/screens/profile/widget/profile_story.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_suggest.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:instagram_flutter/screens/profile/widget/profile_tabs.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,6 +17,20 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreen extends State<ProfileScreen> {
+  final ValueNotifier<bool> isShowSuggest = ValueNotifier<bool>(true);
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<PostProvider>().fetchAllPosts();
+  }
+
+  @override
+  void dispose() {
+    isShowSuggest.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -24,8 +42,20 @@ class _ProfileScreen extends State<ProfileScreen> {
             children: [
               ProfileHeader(),
               ProfileInfo(),
-              ProfileActions(),
-              ProfileSuggest(),
+              ProfileActions(
+                toggleSuggest: () {
+                  isShowSuggest.value = !isShowSuggest.value;
+                },
+                isShowSuggest: isShowSuggest,
+              ),
+              ValueListenableBuilder<bool>(
+                valueListenable: isShowSuggest,
+                builder: (context, show, _) {
+                  return show ? ProfileSuggest() : SizedBox.shrink();
+                },
+              ),
+              ProfileStory(),
+              ProfileTabs(),
             ],
           ),
         ),
