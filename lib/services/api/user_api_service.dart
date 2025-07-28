@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:instagram_flutter/apps/config/api_path.dart';
+import 'package:instagram_flutter/apps/config/routes.dart';
 import 'package:instagram_flutter/apps/config/dio_client.dart';
 
 class UserApiService {
@@ -7,7 +7,7 @@ class UserApiService {
 
   Future<dynamic> getProfile() async {
     try {
-      final response = await dio.get(ApiPath.userProfile);
+      final response = await dio.get(Routes.userProfile);
       //print('Response: ${response.data}');
       return response;
     } on DioException catch (e) {
@@ -17,7 +17,7 @@ class UserApiService {
 
   Future<dynamic> getAllUsersOther() async {
     try {
-      final response = await dio.get(ApiPath.allUsersOther);
+      final response = await dio.get(Routes.allUsersOther);
       return response;
     } on DioException catch (e) {
       throw Exception(e.response?.data ?? 'Failed to get all users');

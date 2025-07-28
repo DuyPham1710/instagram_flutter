@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:instagram_flutter/apps/config/api_path.dart';
+import 'package:instagram_flutter/apps/config/routes.dart';
 import 'package:instagram_flutter/apps/config/dio_client.dart';
 
 class AuthApiService {
@@ -8,7 +8,7 @@ class AuthApiService {
   Future<dynamic> login(String username, String password) async {
     try {
       final response = await dio.post(
-        ApiPath.login,
+        Routes.login,
         data: {'username': username, 'password': password},
       );
       return response;

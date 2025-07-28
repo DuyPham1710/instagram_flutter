@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:instagram_flutter/providers/Follow_provider.dart';
 import 'package:instagram_flutter/providers/post_provider.dart';
 import 'package:instagram_flutter/providers/user_provider.dart';
+import 'package:instagram_flutter/screens/follow/follow_screen.dart';
 import 'package:provider/provider.dart';
 
 class ProfileInfo extends StatefulWidget {
@@ -78,48 +80,80 @@ class ProfileInfoState extends State<ProfileInfo> {
 
                         SizedBox(width: 14.w),
 
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '21',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.bold,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    FollowScreen(initialTabIndex: 0),
                               ),
-                            ),
-                            SizedBox(height: 4.h),
-                            Text(
-                              'người theo dõi',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.bold,
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Consumer<FollowProvider>(
+                                builder: (context, followProvider, child) {
+                                  return Text(
+                                    '${followProvider.followers.length}',
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                },
                               ),
-                            ),
-                          ],
+
+                              SizedBox(height: 4.h),
+
+                              Text(
+                                'người theo dõi',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
 
                         SizedBox(width: 14.w),
 
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '25',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.bold,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    FollowScreen(initialTabIndex: 1),
                               ),
-                            ),
-                            SizedBox(height: 4.h),
-                            Text(
-                              'đang theo dõi',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.bold,
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Consumer<FollowProvider>(
+                                builder: (context, followProvider, child) {
+                                  return Text(
+                                    '${followProvider.following.length}',
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                },
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 4.h),
+                              Text(
+                                'đang theo dõi',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

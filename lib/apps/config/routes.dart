@@ -1,4 +1,4 @@
-class ApiPath {
+class Routes {
   // Api paths for authentication
   static const String login = '/auth/login';
   static const String register = '/auth/register';
@@ -16,4 +16,8 @@ class ApiPath {
 
   // Api paths for posts
   static const String getAllPostsByUser = '/post';
+
+  // Api paths for follow
+  static const String getFollowers = '/follow/get-followers';
+  static const String getFollowing = '/follow/get-following';
 }

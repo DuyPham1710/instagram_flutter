@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/providers/Follow_provider.dart';
 import 'package:instagram_flutter/providers/post_provider.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_actions.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_header.dart';
@@ -17,12 +18,14 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreen extends State<ProfileScreen> {
-  final ValueNotifier<bool> isShowSuggest = ValueNotifier<bool>(true);
+  final ValueNotifier<bool> isShowSuggest = ValueNotifier<bool>(false);
 
   @override
   void initState() {
     super.initState();
     context.read<PostProvider>().fetchAllPosts();
+    context.read<FollowProvider>().fetchFollowers();
+    context.read<FollowProvider>().fetchFollowing();
   }
 
   @override
