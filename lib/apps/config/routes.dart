@@ -23,8 +23,10 @@ class Routes {
   static const String getFollowing = '/follow/get-following';
 
   // Api paths for likes
+  static const String getLikedPosts = '/like/get-liked-posts';
   static const String likePost = '/like/toggle-like';
 
   // Api paths for save posts
+  static const String getSavedPosts = '/save-post/get-saved-posts';
   static const String savePost = '/save-post/toggle-save-post';
 }

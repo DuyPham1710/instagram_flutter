@@ -31,7 +31,7 @@ class PostRepository {
     if (response.statusCode != 200) {
       throw Exception('Failed to fetch following posts: ${response.data}');
     }
-    print('response.data: ${response.data}');
+    //  print('response.data: ${response.data}');
     return (response.data as List)
         .map((postItem) => Post.fromJson(postItem))
         .toList();
@@ -45,5 +45,17 @@ class PostRepository {
     }
 
     return Post.fromJson(response.data);
+  }
+
+  Future<List<SavePost>> getSavedPosts() async {
+    final response = await savePostApiService.getSavedPosts();
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch saved posts: ${response.data}');
+    }
+
+    return (response.data as List)
+        .map((savedPostItem) => SavePost.fromJson(savedPostItem))
+        .toList();
   }
 }

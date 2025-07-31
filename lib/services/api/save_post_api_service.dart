@@ -17,4 +17,13 @@ class SavePostApiService {
       throw Exception(e.response?.data ?? 'Failed to toggle save post');
     }
   }
+
+  Future<dynamic> getSavedPosts() async {
+    try {
+      final response = await dio.get(Routes.getSavedPosts);
+      return response;
+    } on DioException catch (e) {
+      throw Exception(e.response?.data ?? 'Failed to get saved posts');
+    }
+  }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_flutter/screens/auth/login_screen.dart';
-import 'package:instagram_flutter/screens/bottom_navigation/bottom_navigation.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

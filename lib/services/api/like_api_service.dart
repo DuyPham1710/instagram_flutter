@@ -17,4 +17,13 @@ class LikeApiService {
       throw Exception(e.response?.data ?? 'Failed to toggle like post');
     }
   }
+
+  Future<dynamic> getLikedPosts() async {
+    try {
+      final response = await dio.get(Routes.getLikedPosts);
+      return response;
+    } on DioException catch (e) {
+      throw Exception(e.response?.data ?? 'Failed to get liked posts');
+    }
+  }
 }

@@ -13,6 +13,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool _isLoading = false;
+
   final email = TextEditingController();
   FocusNode email_F = FocusNode();
   final password = TextEditingController();
@@ -80,52 +82,82 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget login() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.w),
-      child: InkWell(
-        onTap: () async {
-          final authProvider = Provider.of<AuthProvider>(
-            context,
-            listen: false,
-          );
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          InkWell(
+            onTap: _isLoading
+                ? null
+                : () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
 
-          final success = await authProvider.login(email.text, password.text);
+                    final authProvider = Provider.of<AuthProvider>(
+                      context,
+                      listen: false,
+                    );
 
-          final token = authProvider.token;
+                    final success = await authProvider.login(
+                      email.text,
+                      password.text,
+                    );
 
-          if (success && token != null) {
-            print("Login successful with token: $token");
+                    final token = authProvider.token;
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => BottomNavigation()),
-            );
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Login failed. Please check your credentials.'),
+                    setState(() {
+                      _isLoading = false;
+                    });
+
+                    if (success && token != null) {
+                      print("Login successful with token: $token");
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BottomNavigation(),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Login failed. Please check your credentials.',
+                          ),
+                        ),
+                      );
+                    }
+
+                    // await Authentication()
+                    //     .Login(email: email.text, password: password.text);
+                  },
+            child: Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              height: 44.h,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(10.r),
               ),
-            );
-          }
-
-          // await Authentication()
-          //     .Login(email: email.text, password: password.text);
-        },
-        child: Container(
-          alignment: Alignment.center,
-          width: double.infinity,
-          height: 44.h,
-          decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-          child: Text(
-            'Login',
-            style: TextStyle(
-              fontSize: 22.sp,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+              child: Text(
+                'Login',
+                style: TextStyle(
+                  fontSize: 22.sp,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
-        ),
+          if (_isLoading)
+            Positioned.fill(
+              child: Container(
+                alignment: Alignment.center,
+                color: Colors.black.withOpacity(0.4),
+                child: CircularProgressIndicator(color: Colors.white),
+              ),
+            ),
+        ],
       ),
     );
   }

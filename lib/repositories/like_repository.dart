@@ -1,4 +1,5 @@
 import 'package:instagram_flutter/dto/toggle_like_dto.dart';
+import 'package:instagram_flutter/models/Like.dart';
 import 'package:instagram_flutter/models/Post.dart';
 import 'package:instagram_flutter/services/api/like_api_service.dart';
 
@@ -15,5 +16,17 @@ class LikeRepository {
     }
     // print('response.data: ${response.data}');
     return Post.fromJson(response.data);
+  }
+
+  Future<List<Like>> getLikedPosts() async {
+    final response = await likeApiService.getLikedPosts();
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch liked posts: ${response.data}');
+    }
+
+    return (response.data as List)
+        .map((likedPostItem) => Like.fromJson(likedPostItem))
+        .toList();
   }
 }
