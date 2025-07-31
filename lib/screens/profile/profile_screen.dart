@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/providers/Follow_provider.dart';
 import 'package:instagram_flutter/providers/post_provider.dart';
+import 'package:instagram_flutter/providers/user_provider.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_actions.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_header.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_info.dart';
@@ -44,7 +45,11 @@ class _ProfileScreen extends State<ProfileScreen> {
           child: ListView(
             children: [
               ProfileHeader(),
-              ProfileInfo(),
+              Consumer<UserProvider>(
+                builder: (context, userProvider, child) {
+                  return ProfileInfo(user: userProvider.user);
+                },
+              ),
               ProfileActions(
                 toggleSuggest: () {
                   isShowSuggest.value = !isShowSuggest.value;

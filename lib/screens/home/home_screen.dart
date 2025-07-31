@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/providers/post_provider.dart';
 import 'package:instagram_flutter/screens/home/widget/home_header.dart';
 import 'package:instagram_flutter/screens/home/widget/home_stories_widget.dart';
 import 'package:instagram_flutter/screens/home/widget/post_item.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<PostProvider>().fetchAllPostsFollowing();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +31,7 @@ class HomeScreen extends StatelessWidget {
             ListView.builder(
               physics: NeverScrollableScrollPhysics(), // tránh scroll lồng nhau
               shrinkWrap: true, // giúp list con chiếm chiều cao vừa đủ
-              itemCount: 5,
+              itemCount: context.watch<PostProvider>().postsFollowing.length,
               itemBuilder: (context, index) {
                 return PostItem(index: index);
               },

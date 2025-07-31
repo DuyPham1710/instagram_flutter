@@ -13,4 +13,13 @@ class PostApiService {
       throw Exception(e.response?.data ?? 'Failed to get all posts by user');
     }
   }
+
+  Future<dynamic> getAllPostsFollowing() async {
+    try {
+      final response = await dio.get(Routes.getAllPostsFollowing);
+      return response;
+    } on DioException catch (e) {
+      throw Exception(e.response?.data ?? 'Failed to get all posts following');
+    }
+  }
 }

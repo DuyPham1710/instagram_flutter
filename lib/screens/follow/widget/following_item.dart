@@ -1,18 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:instagram_flutter/dto/user_response_dto.dart';
+import 'package:instagram_flutter/screens/profile/user_profile_screen.dart';
 
 class FollowingItem extends StatelessWidget {
-  final String fullName;
-  final String userName;
-  final String avatarUrl;
+  final UserResponseDto user;
 
-  const FollowingItem({
-    super.key,
-    required this.fullName,
-    required this.userName,
-    required this.avatarUrl,
-  });
+  const FollowingItem({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -21,32 +16,45 @@ class FollowingItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(avatarUrl),
-                radius: 28.0,
-              ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserProfileScreen(user: user),
+                ),
+              );
+            },
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: NetworkImage(user.avatarUrl as String),
+                  radius: 28.0,
+                ),
 
-              SizedBox(width: 10.w),
+                SizedBox(width: 10.w),
 
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    userName,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14.sp,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user.username,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp,
+                      ),
                     ),
-                  ),
-                  Text(
-                    fullName,
-                    style: TextStyle(color: Colors.grey[600], fontSize: 12.sp),
-                  ),
-                ],
-              ),
-            ],
+                    Text(
+                      user.fullName,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
 
           Row(

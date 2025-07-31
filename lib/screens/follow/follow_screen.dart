@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:instagram_flutter/dto/user_response_dto.dart';
 import 'package:instagram_flutter/providers/Follow_provider.dart';
 import 'package:instagram_flutter/providers/user_provider.dart';
 import 'package:instagram_flutter/screens/follow/widget/follower_item.dart';
@@ -88,12 +89,10 @@ class _FollowScreenState extends State<FollowScreen> {
                 ListView.builder(
                   itemCount: followProvider.followers.length,
                   itemBuilder: (context, index) {
-                    final user = followProvider.followers[index].follower;
-                    return FollowerItem(
-                      fullName: user?.fullName ?? '',
-                      userName: user?.username ?? '',
-                      avatarUrl: user?.avatarUrl ?? '',
-                    );
+                    UserResponseDto user =
+                        followProvider.followers[index].follower
+                            as UserResponseDto;
+                    return FollowerItem(user: user);
                   },
                 ),
 
@@ -101,12 +100,10 @@ class _FollowScreenState extends State<FollowScreen> {
                 ListView.builder(
                   itemCount: followProvider.following.length,
                   itemBuilder: (context, index) {
-                    final user = followProvider.following[index].following;
-                    return FollowingItem(
-                      fullName: user?.fullName ?? '',
-                      userName: user?.username ?? '',
-                      avatarUrl: user?.avatarUrl ?? '',
-                    );
+                    UserResponseDto user =
+                        followProvider.following[index].following
+                            as UserResponseDto;
+                    return FollowingItem(user: user);
                   },
                 ),
               ],
