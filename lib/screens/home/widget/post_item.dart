@@ -5,6 +5,8 @@ import 'package:instagram_flutter/dto/toggle_like_dto.dart';
 import 'package:instagram_flutter/dto/toggle_save_post_dto.dart';
 import 'package:instagram_flutter/models/PostImages.dart';
 import 'package:instagram_flutter/providers/post_provider.dart';
+import 'package:instagram_flutter/screens/home/widget/modal_comment.dart';
+import 'package:instagram_flutter/screens/home/widget/modal_like.dart';
 import 'package:instagram_flutter/screens/home/widget/modal_more.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -153,11 +155,38 @@ class PostItem extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 6.w),
-                  Text('144'),
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ModalLike(
+                            likePost:
+                                postProvider.postsFollowing[index].likePost,
+                          );
+                        },
+                      );
+                    },
+                    child: Text(
+                      '${postProvider.postsFollowing[index].likeCount}',
+                    ),
+                  ),
                   SizedBox(width: 10.w),
                   Icon(CupertinoIcons.chat_bubble),
                   SizedBox(width: 6.w),
-                  Text('14'),
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ModalComment();
+                        },
+                      );
+                    },
+                    child: Text('14'),
+                  ),
                   SizedBox(width: 10.w),
                   Icon(CupertinoIcons.paperplane),
                   Spacer(),

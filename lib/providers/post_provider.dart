@@ -123,7 +123,7 @@ class PostProvider extends ChangeNotifier {
 
       for (var like in _likedPosts) {
         final index = _postsFollowing.indexWhere(
-          (p) => p.postId == like.post.postId,
+          (p) => p.postId == like.post?.postId,
         );
         if (index != -1) {
           _postsFollowing[index].isLiked = true;

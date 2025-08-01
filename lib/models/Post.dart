@@ -1,4 +1,5 @@
 import 'package:instagram_flutter/dto/user_response_dto.dart';
+import 'package:instagram_flutter/models/Like.dart';
 import 'package:instagram_flutter/models/PostImages.dart';
 
 class Post {
@@ -9,6 +10,8 @@ class Post {
   final DateTime createdAt;
   bool? isSaved;
   bool? isLiked;
+  int likeCount = 0;
+  List<Like> likePost;
 
   Post({
     required this.postId,
@@ -18,9 +21,16 @@ class Post {
     required this.createdAt,
     this.isSaved = false,
     this.isLiked = false,
+    this.likeCount = 0,
+    this.likePost = const [],
   });
 
   factory Post.fromJson(Map<String, dynamic> json) {
+    final List<Like> parsedLikes =
+        (json['likePost'] as List?)
+            ?.map((like) => Like.fromJsonSimple(like))
+            .toList() ??
+        [];
     return Post(
       postId: json['postId'],
       caption: json['caption'],
@@ -33,6 +43,8 @@ class Post {
       createdAt: DateTime.parse(json['createdAt']),
       isSaved: json['isSaved'] != null ? json['isSaved'] as bool : false,
       isLiked: json['isLiked'] != null ? json['isLiked'] as bool : false,
+      likeCount: parsedLikes.length,
+      likePost: parsedLikes,
     );
   }
 
@@ -44,6 +56,8 @@ class Post {
       'createdAt': createdAt.toIso8601String(),
       'isSaved': isSaved,
       'isLiked': isLiked,
+      'likeCount': likeCount,
+      'likePost': likePost.map((like) => like.toJson()).toList(),
     };
   }
 }

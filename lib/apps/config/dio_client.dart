@@ -9,7 +9,7 @@ class DioClient {
 
   DioClient._internal() {
     BaseOptions options = BaseOptions(
-      baseUrl: 'http://192.168.1.3:3000/',
+      baseUrl: 'http://192.168.1.6:3000/',
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
       headers: {
