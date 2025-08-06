@@ -15,6 +15,26 @@ class FollowProvider extends ChangeNotifier {
 
   FollowProvider({required this.followRepository});
 
+  Future<List<Follow>> fetchFollowersByUserId(int userId) async {
+    try {
+      final followers = await followRepository.getFollowersByUserId(userId);
+      return followers;
+    } catch (e) {
+      print('Failed to fetch followers: $e');
+      return [];
+    }
+  }
+
+  Future<List<Follow>> fetchFollowingByUserId(int userId) async {
+    try {
+      final following = await followRepository.getFollowingByUserId(userId);
+      return following;
+    } catch (e) {
+      print('Failed to fetch following: $e');
+      return [];
+    }
+  }
+
   Future<void> fetchFollowers() async {
     try {
       _followers = await followRepository.getFollowers();

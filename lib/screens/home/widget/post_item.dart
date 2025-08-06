@@ -168,6 +168,7 @@ class PostItem extends StatelessWidget {
                         },
                       );
                     },
+
                     child: Text(
                       '${postProvider.postsFollowing[index].likeCount}',
                     ),

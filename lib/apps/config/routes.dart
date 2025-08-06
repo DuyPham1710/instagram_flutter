@@ -16,11 +16,16 @@ class Routes {
 
   // Api paths for posts
   static const String getAllPostsByUser = '/post';
+  static String getAllPostsByUserId(int userId) => '/post/user/$userId';
   static const String getAllPostsFollowing = '/post/following';
 
   // Api paths for follow
   static const String getFollowers = '/follow/get-followers';
   static const String getFollowing = '/follow/get-following';
+  static String getFollowersByUserId(int userId) =>
+      '/follow/get-followers/$userId';
+  static String getFollowingByUserId(int userId) =>
+      '/follow/get-following/$userId';
 
   // Api paths for likes
   static const String getLikedPosts = '/like/get-liked-posts';

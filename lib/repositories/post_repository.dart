@@ -13,6 +13,18 @@ class PostRepository {
     required this.savePostApiService,
   });
 
+  Future<List<Post>> getAllPostsByUserId(int userId) async {
+    final response = await postApiService.getAllPostsByUserId(userId);
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch posts: ${response.data}');
+    }
+    // print('response.data: ${response.data}');
+    return (response.data as List)
+        .map((postItem) => Post.fromJson(postItem))
+        .toList();
+  }
+
   Future<dynamic> getAllPostsByUser() async {
     final response = await postApiService.getAllPostsByUser();
 

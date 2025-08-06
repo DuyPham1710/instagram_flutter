@@ -40,6 +40,16 @@ class PostProvider extends ChangeNotifier {
     }
   }
 
+  Future<List<Post>> fetchPostsByUserId(int userId) async {
+    try {
+      final postsByUser = await postRepository.getAllPostsByUserId(userId);
+      return postsByUser;
+    } catch (e) {
+      print('Failed to fetch posts: $e');
+      return [];
+    }
+  }
+
   Future<void> fetchAllPosts() async {
     try {
       _posts = await postRepository.getAllPostsByUser();
@@ -89,6 +99,13 @@ class PostProvider extends ChangeNotifier {
 
       if (index != -1) {
         _postsFollowing[index].isLiked = updatedPost.isLiked;
+        _postsFollowing[index].likePost = updatedPost.likePost;
+
+        if (_postsFollowing[index].isLiked != null) {
+          _postsFollowing[index].isLiked == true
+              ? _postsFollowing[index].likeCount++
+              : _postsFollowing[index].likeCount--;
+        }
       }
 
       notifyListeners();

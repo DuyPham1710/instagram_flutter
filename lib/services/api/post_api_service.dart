@@ -5,6 +5,18 @@ import 'package:instagram_flutter/apps/config/dio_client.dart';
 class PostApiService {
   final Dio dio = DioClient().dio;
 
+  Future<dynamic> getAllPostsByUserId(int userId) async {
+    try {
+      final response = await dio.get(
+        Routes.getAllPostsByUserId(userId),
+        queryParameters: {'userId': userId},
+      );
+      return response;
+    } on DioException catch (e) {
+      throw Exception(e.response?.data ?? 'Failed to get posts by user ID');
+    }
+  }
+
   Future<dynamic> getAllPostsByUser() async {
     try {
       final response = await dio.get(Routes.getAllPostsByUser);

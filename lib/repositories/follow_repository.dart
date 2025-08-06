@@ -6,6 +6,28 @@ class FollowRepository {
 
   FollowRepository({required this.followApiService});
 
+  Future<List<Follow>> getFollowersByUserId(int userId) async {
+    final response = await followApiService.getFollowersByUserId(userId);
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch followers: ${response.data}');
+    }
+    return (response.data as List)
+        .map((followerItem) => Follow.fromJson(followerItem))
+        .toList();
+  }
+
+  Future<List<Follow>> getFollowingByUserId(int userId) async {
+    final response = await followApiService.getFollowingByUserId(userId);
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch following: ${response.data}');
+    }
+    return (response.data as List)
+        .map((followingItem) => Follow.fromJson(followingItem))
+        .toList();
+  }
+
   Future<dynamic> getFollowers() async {
     final response = await followApiService.getFollowers();
 

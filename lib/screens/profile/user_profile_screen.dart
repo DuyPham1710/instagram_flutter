@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_flutter/dto/user_response_dto.dart';
-import 'package:instagram_flutter/screens/profile/widget/profile_info.dart';
+import 'package:instagram_flutter/screens/profile/widget/profile_info_user.dart';
+import 'package:instagram_flutter/screens/profile/widget/profile_story.dart';
+import 'package:instagram_flutter/screens/profile/widget/profile_tabs.dart';
 
 class UserProfileScreen extends StatelessWidget {
   final UserResponseDto user;
@@ -38,7 +40,7 @@ class UserProfileScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
           children: [
-            ProfileInfo(user: user),
+            ProfileInfoUser(user: user),
 
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -56,6 +58,11 @@ class UserProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
+
+            SizedBox(height: 10.h),
+
+            ProfileStory(),
+            ProfileTabs(),
           ],
         ),
       ),
