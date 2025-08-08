@@ -13,7 +13,11 @@ class AuthApiService {
       );
       return response;
     } on DioException catch (e) {
-      throw Exception(e.response?.data ?? 'Login failed');
+      throw DioException(
+        requestOptions: e.requestOptions,
+        response: e.response,
+        type: DioExceptionType.badResponse,
+      );
     }
   }
 

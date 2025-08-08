@@ -19,9 +19,7 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) {
         return MaterialApp(debugShowCheckedModeBanner: false, home: child);
       },
-      child: LoginScreen(() {
-        print("Sign up tapped");
-      }),
+      child: LoginScreen(),
       //   child: BottomNavigation(
       // child: HomeScreen(),
       //),

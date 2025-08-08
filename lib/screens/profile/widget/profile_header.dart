@@ -14,7 +14,7 @@ class ProfileHeader extends StatelessWidget {
         final userName = userProvider.user?.username ?? '...';
 
         return Container(
-          padding: EdgeInsets.symmetric(vertical: 8.h),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           color: Colors.white,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

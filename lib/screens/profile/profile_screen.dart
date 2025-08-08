@@ -37,35 +37,32 @@ class _ProfileScreen extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: ListView(
-            children: [
-              ProfileHeader(),
-              Consumer<UserProvider>(
-                builder: (context, userProvider, child) {
-                  return ProfileInfo(user: userProvider.user);
-                },
-              ),
-              ProfileActions(
-                toggleSuggest: () {
-                  isShowSuggest.value = !isShowSuggest.value;
-                },
-                isShowSuggest: isShowSuggest,
-              ),
-              ValueListenableBuilder<bool>(
-                valueListenable: isShowSuggest,
-                builder: (context, show, _) {
-                  return show ? ProfileSuggest() : SizedBox.shrink();
-                },
-              ),
-              ProfileStory(),
-              ProfileTabs(),
-            ],
-          ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: ListView(
+          children: [
+            ProfileHeader(),
+            Consumer<UserProvider>(
+              builder: (context, userProvider, child) {
+                return ProfileInfo(user: userProvider.user);
+              },
+            ),
+            ProfileActions(
+              toggleSuggest: () {
+                isShowSuggest.value = !isShowSuggest.value;
+              },
+              isShowSuggest: isShowSuggest,
+            ),
+            ValueListenableBuilder<bool>(
+              valueListenable: isShowSuggest,
+              builder: (context, show, _) {
+                return show ? ProfileSuggest() : SizedBox.shrink();
+              },
+            ),
+            ProfileStory(),
+            IntrinsicHeight(child: ProfileTabs()),
+          ],
         ),
       ),
     );

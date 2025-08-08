@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_flutter/providers/auth_provider.dart';
+import 'package:instagram_flutter/screens/auth/register_screen.dart';
 import 'package:instagram_flutter/screens/bottom_navigation/bottom_navigation.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  final VoidCallback show;
-  LoginScreen(this.show, {super.key});
+  LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -64,7 +64,12 @@ class _LoginScreenState extends State<LoginScreen> {
             style: TextStyle(fontSize: 14.sp, color: Colors.grey),
           ),
           GestureDetector(
-            onTap: widget.show,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RegisterScreen()),
+              );
+            },
             child: Text(
               "Sign up ",
               style: TextStyle(
@@ -98,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       listen: false,
                     );
 
-                    final success = await authProvider.login(
+                    final errorMessage = await authProvider.login(
                       email.text,
                       password.text,
                     );
@@ -109,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       _isLoading = false;
                     });
 
-                    if (success && token != null) {
+                    if (errorMessage == null) {
                       print("Login successful with token: $token");
 
                       Navigator.push(
@@ -119,11 +124,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       );
                     } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Login failed. Please check your credentials.',
-                          ),
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Login Failed'),
+                          content: Text(errorMessage),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text('OK'),
+                            ),
+                          ],
                         ),
                       );
                     }
@@ -153,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Positioned.fill(
               child: Container(
                 alignment: Alignment.center,
-                color: Colors.black.withOpacity(0.4),
+                color: Colors.white.withOpacity(0.4),
                 child: CircularProgressIndicator(color: Colors.white),
               ),
             ),
@@ -209,7 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.r),
-              borderSide: BorderSide(width: 2.w, color: Colors.grey),
+              borderSide: BorderSide(width: 1.w, color: Colors.grey),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5.r),

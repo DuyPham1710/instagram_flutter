@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/apps/config/dio_client.dart';
+import 'package:instagram_flutter/dto/ApiResponse.dart';
 import 'package:instagram_flutter/repositories/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,7 +14,7 @@ class AuthProvider extends ChangeNotifier {
 
   String? get token => _token;
 
-  Future<bool> login(String email, String password) async {
+  Future<String?> login(String email, String password) async {
     try {
       _token = await repository.loginUser(email, password);
 
@@ -23,10 +25,21 @@ class AuthProvider extends ChangeNotifier {
       // await prefs.setString('accessToken', _token!);
 
       notifyListeners();
-      return true;
+      return null;
+    } on DioException catch (e) {
+      //   print('>>> check ${e.response}');
+      // Nếu API có trả message
+      if (e.response?.data != null) {
+        try {
+          final apiResponse = ApiResponse.fromJson(e.response!.data);
+          return apiResponse.message;
+        } catch (_) {
+          return e.response?.data.toString();
+        }
+      }
+      return "Server error";
     } catch (e) {
-      print('Login failed: $e');
-      return false;
+      return "Unknown error occurred";
     }
   }
 }

@@ -6,32 +6,35 @@ class ProfileStory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: 60.w,
-              height: 60.w,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.grey.shade300, width: 2),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 60.w,
+                height: 60.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.grey.shade300, width: 2),
+                ),
+                child: Center(
+                  child: Icon(Icons.add, size: 24.sp, color: Colors.black),
+                ),
               ),
-              child: Center(
-                child: Icon(Icons.add, size: 24.sp, color: Colors.black),
-              ),
-            ),
-            SizedBox(height: 6.h),
+              SizedBox(height: 6.h),
 
-            Text(
-              'New',
-              style: TextStyle(fontSize: 12.sp, color: Colors.black),
-            ),
-          ],
-        ),
-      ],
+              Text(
+                'New',
+                style: TextStyle(fontSize: 12.sp, color: Colors.black),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
