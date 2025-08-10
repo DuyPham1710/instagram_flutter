@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:instagram_flutter/models/Post.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_post_item.dart';
 
 class ProfileTabs extends StatefulWidget {
-  const ProfileTabs({super.key});
+  final List<Post> posts;
+  const ProfileTabs({super.key, required this.posts});
 
   @override
   State<ProfileTabs> createState() => _ProfileTabsState();
@@ -14,7 +16,6 @@ class _ProfileTabsState extends State<ProfileTabs>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  int itemCount = 39;
   int crossAxisCount = 3;
   double childAspectRatio = 0.8; // childAspectRatio = width / height
   double spacing = 1.0;
@@ -39,7 +40,11 @@ class _ProfileTabsState extends State<ProfileTabs>
     super.dispose();
   }
 
-  double _calculateGridHeight() {
+  double _calculateGridHeight(int itemCount) {
+    if (itemCount == 0) {
+      return 200.0; // Chiều cao tối thiểu khi không có posts
+    }
+
     // Tính số hàng cần thiết
     final int rows = (itemCount / crossAxisCount).ceil();
 
@@ -50,20 +55,29 @@ class _ProfileTabsState extends State<ProfileTabs>
     final double itemHeight = itemWidth / childAspectRatio;
 
     // Tính tổng chiều cao cần thiết
-    return rows * itemHeight + (rows - 1) * spacing;
+    final double calculatedHeight = rows * itemHeight + (rows - 1) * spacing;
+
+    // Đảm bảo chiều cao không âm và có giá trị tối thiểu
+    return calculatedHeight > 0 ? calculatedHeight : 200.0;
   }
 
   @override
   Widget build(BuildContext context) {
-    // Tính toán chiều cao động
+    final posts = widget.posts;
+    final itemCount = posts.length;
+
+    // Tính toán chiều cao động với giá trị tối thiểu
     double tabHeight;
     if (_tabController.index == 0) {
-      tabHeight = _calculateGridHeight();
+      tabHeight = _calculateGridHeight(itemCount);
     } else if (_tabController.index == 1) {
-      tabHeight = 200; // Chiều cao cho tab 2
+      tabHeight = 200.0; // Chiều cao cho tab 2
     } else {
-      tabHeight = 150; // Chiều cao cho tab 3
+      tabHeight = 200.0; // Chiều cao cho tab 3
     }
+
+    // Đảm bảo tabHeight luôn dương
+    tabHeight = tabHeight.abs().clamp(100.0, double.infinity);
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -95,22 +109,54 @@ class _ProfileTabsState extends State<ProfileTabs>
               controller: _tabController,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.zero,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    crossAxisSpacing: spacing,
-                    mainAxisSpacing: spacing,
-                    childAspectRatio: childAspectRatio,
+                // Tab Posts
+                posts.isEmpty
+                    ? Center(
+                        child: Text(
+                          'No Posts Yet',
+                          style: TextStyle(
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    : GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          crossAxisSpacing: spacing,
+                          mainAxisSpacing: spacing,
+                          childAspectRatio: childAspectRatio,
+                        ),
+                        itemCount: itemCount,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return ProfilePostItem(
+                            posts: posts,
+                            post: post.images.isNotEmpty ? post : null,
+                          );
+                        },
+                      ),
+                Center(
+                  child: Text(
+                    'Share a moment with everyone',
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  itemCount: itemCount,
-                  itemBuilder: (context, index) {
-                    return const ProfilePostItem();
-                  },
                 ),
-                Center(child: Text('Chia sẻ khoảng khắc với tất cả mọi người')),
-                Center(child: Text('Ảnh và video được gắn thẻ')),
+                Center(
+                  child: Text(
+                    'Photos and videos you\'re tagged in',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 24.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

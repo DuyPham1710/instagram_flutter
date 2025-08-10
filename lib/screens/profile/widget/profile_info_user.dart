@@ -6,6 +6,7 @@ import 'package:instagram_flutter/models/Post.dart';
 import 'package:instagram_flutter/providers/Follow_provider.dart';
 import 'package:instagram_flutter/providers/post_provider.dart';
 import 'package:instagram_flutter/screens/follow/follow_screen.dart';
+import 'package:instagram_flutter/screens/post/post_screen.dart';
 import 'package:provider/provider.dart';
 
 class ProfileInfoUser extends StatefulWidget {
@@ -53,7 +54,7 @@ class ProfileInfoUserState extends State<ProfileInfoUser> {
     final user = widget.user;
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -103,27 +104,40 @@ class ProfileInfoUserState extends State<ProfileInfoUser> {
 
                     return Row(
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${posts.length}',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.bold,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PostScreen(
+                                  posts: posts,
+                                  selectedPostIndex: 0,
+                                ),
                               ),
-                            ),
-
-                            SizedBox(height: 4.h),
-
-                            Text(
-                              'bài viết',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.bold,
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${posts.length}',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
+
+                              SizedBox(height: 4.h),
+
+                              Text(
+                                'bài viết',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
 
                         SizedBox(width: 14.w),

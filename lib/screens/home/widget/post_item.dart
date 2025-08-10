@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_flutter/dto/toggle_like_dto.dart';
 import 'package:instagram_flutter/dto/toggle_save_post_dto.dart';
+import 'package:instagram_flutter/models/Post.dart';
 import 'package:instagram_flutter/models/PostImages.dart';
 import 'package:instagram_flutter/providers/post_provider.dart';
 import 'package:instagram_flutter/screens/home/widget/modal_comment.dart';
@@ -13,9 +14,18 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostItem extends StatelessWidget {
+  final List<Post> posts;
   final int index;
+  bool isLiked;
+  bool isSaved;
 
-  PostItem({super.key, required this.index});
+  PostItem({
+    super.key,
+    required this.index,
+    required this.posts,
+    required this.isLiked,
+    required this.isSaved,
+  });
 
   final PageController _pageController = PageController();
   List<PostImages> _imagePaths = [];
@@ -24,14 +34,14 @@ class PostItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<PostProvider>(
       builder: (context, postProvider, child) {
-        if (postProvider.postsFollowing.isEmpty) {
+        if (posts.isEmpty) {
           return Center(child: CircularProgressIndicator());
         }
-        if (index >= postProvider.postsFollowing.length) {
+        if (index >= posts.length) {
           return SizedBox.shrink(); // Tránh lỗi khi index vượt quá số lượng bài viết
         }
 
-        _imagePaths = postProvider.postsFollowing[index].images;
+        _imagePaths = posts[index].images;
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +76,7 @@ class PostItem extends StatelessWidget {
                       border: Border.all(color: Colors.white, width: 2.h),
                       image: DecorationImage(
                         image: NetworkImage(
-                          postProvider.postsFollowing[index].user?.avatarUrl ??
+                          posts[index].user?.avatarUrl ??
                               'https://example.com/default_avatar.jpg',
                         ),
                         fit: BoxFit.cover,
@@ -75,12 +85,8 @@ class PostItem extends StatelessWidget {
                   ),
                 ],
               ),
-              title: Text(
-                postProvider.postsFollowing[index].user?.username ?? 'Unknown',
-              ),
-              subtitle: Text(
-                timeago.format(postProvider.postsFollowing[index].createdAt),
-              ),
+              title: Text(posts[index].user?.username ?? 'Unknown'),
+              subtitle: Text(timeago.format(posts[index].createdAt)),
               trailing: InkWell(
                 onTap: () {
                   showModalBottomSheet(
@@ -139,19 +145,19 @@ class PostItem extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () async {
-                      final postId = postProvider.postsFollowing[index].postId;
+                      final postId = posts[index].postId;
 
                       await postProvider.toggleLikePost(
                         ToggleLikeDto(postId: postId),
                       );
+
+                      isLiked = !isLiked;
                     },
                     child: Icon(
-                      postProvider.postsFollowing[index].isLiked == true
+                      isLiked
                           ? CupertinoIcons.heart_fill
                           : CupertinoIcons.heart,
-                      color: postProvider.postsFollowing[index].isLiked == true
-                          ? Colors.red
-                          : Colors.black,
+                      color: isLiked == true ? Colors.red : Colors.black,
                     ),
                   ),
                   SizedBox(width: 6.w),
@@ -161,17 +167,12 @@ class PostItem extends StatelessWidget {
                         isScrollControlled: true,
                         context: context,
                         builder: (BuildContext context) {
-                          return ModalLike(
-                            likePost:
-                                postProvider.postsFollowing[index].likePost,
-                          );
+                          return ModalLike(likePost: posts[index].likePost);
                         },
                       );
                     },
 
-                    child: Text(
-                      '${postProvider.postsFollowing[index].likeCount}',
-                    ),
+                    child: Text('${posts[index].likeCount}'),
                   ),
                   SizedBox(width: 10.w),
                   Icon(CupertinoIcons.chat_bubble),
@@ -193,13 +194,14 @@ class PostItem extends StatelessWidget {
                   Spacer(),
                   GestureDetector(
                     onTap: () async {
-                      final postId = postProvider.postsFollowing[index].postId;
+                      final postId = posts[index].postId;
                       await postProvider.savePost(
                         ToggleSavePostDto(postId: postId),
                       );
+                      isSaved = !isSaved;
                     },
                     child: Icon(
-                      postProvider.postsFollowing[index].isSaved == true
+                      isSaved
                           ? CupertinoIcons.bookmark_fill
                           : CupertinoIcons.bookmark,
                     ),

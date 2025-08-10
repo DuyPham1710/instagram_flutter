@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:instagram_flutter/dto/user_response_dto.dart';
 
 class StoryItem extends StatelessWidget {
   final int index;
-  const StoryItem({super.key, required this.index});
+  final UserResponseDto user;
+
+  const StoryItem({super.key, required this.index, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -34,16 +37,16 @@ class StoryItem extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: Colors.white,
                   border: Border.all(color: Colors.white, width: 3.h),
-                  image: DecorationImage(
-                    image: AssetImage('images/avt.jpg'),
-                    fit: BoxFit.cover,
-                  ),
+                ),
+                child: CircleAvatar(
+                  radius: 40.r,
+                  backgroundImage: NetworkImage(user.avatarUrl ?? ''),
                 ),
               ),
             ],
           ),
           SizedBox(height: 6.h),
-          Text('User $index', style: TextStyle(fontSize: 12.sp)),
+          Text(user.username, style: TextStyle(fontSize: 12.sp)),
         ],
       ),
     );

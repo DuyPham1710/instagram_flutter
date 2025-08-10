@@ -23,76 +23,81 @@ class ProfileSuggestState extends State<ProfileSuggest> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _futureUsersOther,
-      builder: (context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: FutureBuilder(
+        future: _futureUsersOther,
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(color: Colors.black),
+            );
+          }
 
-        if (!snapshot.hasData) {
-          return Center(
-            child: Text(
-              'Error fetching user data',
-              style: TextStyle(color: Colors.white, fontSize: 20),
+          if (!snapshot.hasData) {
+            return Center(
+              child: Text(
+                'Error fetching user data',
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+            );
+          }
+
+          List<UserResponseDto> usersOther =
+              snapshot.data as List<UserResponseDto>;
+
+          return Container(
+            padding: EdgeInsets.symmetric(vertical: 20.h),
+            color: Colors.transparent,
+            width: double.infinity,
+            height: 312.h,
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Discover People',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      'See All',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: Colors.blueAccent,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 10.h),
+
+                Expanded(
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: usersOther.length,
+                    itemBuilder: (context, index) {
+                      return SuggestItem(
+                        user: usersOther[index],
+                        onClose: () {
+                          // Handle close action
+                          print('Close item $index');
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           );
-        }
-
-        List<UserResponseDto> usersOther =
-            snapshot.data as List<UserResponseDto>;
-
-        return Container(
-          padding: EdgeInsets.symmetric(vertical: 20.h),
-          color: Colors.transparent,
-          width: double.infinity,
-          height: 312.h,
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Khám phá mọi người',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Xem tất cả',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: Colors.blueAccent,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 10.h),
-
-              Expanded(
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: usersOther.length,
-                  itemBuilder: (context, index) {
-                    return SuggestItem(
-                      user: usersOther[index],
-                      onClose: () {
-                        // Handle close action
-                        print('Close item $index');
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 }

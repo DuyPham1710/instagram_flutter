@@ -61,7 +61,9 @@ class _ProfileScreen extends State<ProfileScreen> {
               },
             ),
             ProfileStory(),
-            IntrinsicHeight(child: ProfileTabs()),
+            IntrinsicHeight(
+              child: ProfileTabs(posts: context.watch<PostProvider>().posts),
+            ),
           ],
         ),
       ),

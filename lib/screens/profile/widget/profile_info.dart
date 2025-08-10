@@ -4,6 +4,7 @@ import 'package:instagram_flutter/dto/user_response_dto.dart';
 import 'package:instagram_flutter/providers/Follow_provider.dart';
 import 'package:instagram_flutter/providers/post_provider.dart';
 import 'package:instagram_flutter/screens/follow/follow_screen.dart';
+import 'package:instagram_flutter/screens/post/post_screen.dart';
 import 'package:provider/provider.dart';
 
 class ProfileInfo extends StatefulWidget {
@@ -50,31 +51,44 @@ class ProfileInfoState extends State<ProfileInfo> {
 
                 Row(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Consumer<PostProvider>(
-                          builder: (context, postProvider, child) {
-                            return Text(
-                              '${postProvider.posts.length}',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            );
-                          },
-                        ),
-
-                        SizedBox(height: 4.h),
-
-                        Text(
-                          'bài viết',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PostScreen(
+                              posts: context.read<PostProvider>().posts,
+                              selectedPostIndex: 0,
+                            ),
                           ),
-                        ),
-                      ],
+                        );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Consumer<PostProvider>(
+                            builder: (context, postProvider, child) {
+                              return Text(
+                                '${postProvider.posts.length}',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            },
+                          ),
+
+                          SizedBox(height: 4.h),
+
+                          Text(
+                            'bài viết',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
 
                     SizedBox(width: 14.w),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_flutter/screens/auth/login_screen.dart';
+import 'package:instagram_flutter/screens/intro.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -19,7 +20,8 @@ class _MyAppState extends State<MyApp> {
       builder: (context, child) {
         return MaterialApp(debugShowCheckedModeBanner: false, home: child);
       },
-      child: LoginScreen(),
+      child: Intro(),
+      // child: LoginScreen(),
       //   child: BottomNavigation(
       // child: HomeScreen(),
       //),

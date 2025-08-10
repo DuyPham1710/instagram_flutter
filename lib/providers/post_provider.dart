@@ -70,17 +70,17 @@ class PostProvider extends ChangeNotifier {
 
   Future<void> savePost(ToggleSavePostDto toggleSavePostDto) async {
     try {
-      final updatedPost = await postRepository.toggleSavePost(
-        toggleSavePostDto,
-      );
+      final message = await postRepository.toggleSavePost(toggleSavePostDto);
+      print('>>> check message toggle save: $message');
+      await fetchSavedPosts();
 
-      final index = _postsFollowing.indexWhere(
-        (p) => p.postId == toggleSavePostDto.postId,
-      );
+      // final index = _postsFollowing.indexWhere(
+      //   (p) => p.postId == toggleSavePostDto.postId,
+      // );
 
-      if (index != -1) {
-        _postsFollowing[index].isSaved = updatedPost.isSaved;
-      }
+      // if (index != -1) {
+      //   _postsFollowing[index].isSaved = updatedPost.isSaved;
+      // }
 
       notifyListeners();
     } catch (e) {
@@ -92,6 +92,8 @@ class PostProvider extends ChangeNotifier {
   Future<void> toggleLikePost(ToggleLikeDto toggleLikeDto) async {
     try {
       final updatedPost = await likeRepository.toggleLikePost(toggleLikeDto);
+
+      await fetchLikedPosts();
 
       final index = _postsFollowing.indexWhere(
         (p) => p.postId == toggleLikeDto.postId,

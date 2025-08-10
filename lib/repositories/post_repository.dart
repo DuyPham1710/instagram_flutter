@@ -55,8 +55,8 @@ class PostRepository {
     if (response.statusCode != 201) {
       throw Exception('Failed to toggle save post: ${response.data}');
     }
-
-    return Post.fromJson(response.data);
+    return response.data['message'];
+    // return Post.fromJson(response.data);
   }
 
   Future<List<SavePost>> getSavedPosts() async {

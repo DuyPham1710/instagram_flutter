@@ -39,12 +39,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     shrinkWrap: true, // giúp list con chiếm chiều cao vừa đủ
                     itemCount: postProvider.postsFollowing.length,
                     itemBuilder: (context, index) {
-                      return PostItem(index: index);
+                      final postId = postProvider.postsFollowing[index].postId;
+                      final likedPosts = postProvider.likedPosts;
+                      final savedPosts = postProvider.savedPosts;
+
+                      final isLiked = likedPosts.any(
+                        (likePost) => likePost.post?.postId == postId,
+                      );
+
+                      final isSaved = savedPosts.any(
+                        (savedPost) => savedPost.post.postId == postId,
+                      );
+
+                      return PostItem(
+                        posts: postProvider.postsFollowing,
+                        index: index,
+                        isLiked: isLiked,
+                        isSaved: isSaved,
+                      );
                     },
                   ),
                 ],
               )
-            : Center(child: CircularProgressIndicator()),
+            : Center(child: CircularProgressIndicator(color: Colors.white)),
       ),
     );
   }
