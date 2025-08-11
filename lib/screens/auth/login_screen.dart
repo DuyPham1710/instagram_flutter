@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:instagram_flutter/dto/login_dto.dart';
 import 'package:instagram_flutter/providers/auth_provider.dart';
+import 'package:instagram_flutter/screens/auth/otp_screen.dart';
 import 'package:instagram_flutter/screens/auth/register_screen.dart';
 import 'package:instagram_flutter/screens/bottom_navigation/bottom_navigation.dart';
 import 'package:provider/provider.dart';
@@ -103,10 +105,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       listen: false,
                     );
 
-                    final errorMessage = await authProvider.login(
-                      email.text,
-                      password.text,
+                    final loginDto = LoginDto(
+                      email: email.text,
+                      password: password.text,
                     );
+
+                    final errorMessage = await authProvider.login(loginDto);
 
                     final token = authProvider.token;
 
@@ -124,23 +128,68 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       );
                     } else {
+                      final isNotActivated = errorMessage.contains(
+                        "not activated",
+                      );
+
                       showDialog(
                         context: context,
-                        builder: (context) => AlertDialog(
-                          title: Text('Login Failed'),
-                          content: Text(errorMessage),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text('OK'),
-                            ),
-                          ],
-                        ),
+                        builder: (context) {
+                          bool isDialogLoading = false;
+                          return StatefulBuilder(
+                            builder: (context, setDialogState) {
+                              return AlertDialog(
+                                title: Text('Login Failed'),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(errorMessage),
+                                    if (isDialogLoading) ...[
+                                      SizedBox(height: 16),
+                                      CircularProgressIndicator(
+                                        color: Colors.black,
+                                      ),
+                                    ],
+                                  ],
+                                ),
+                                actions: [
+                                  if (isNotActivated)
+                                    TextButton(
+                                      onPressed: () async {
+                                        setDialogState(
+                                          () => isDialogLoading = true,
+                                        );
+
+                                        await authProvider.resendOtp(
+                                          email.text,
+                                        );
+
+                                        setDialogState(
+                                          () => isDialogLoading = false,
+                                        );
+
+                                        Navigator.pop(context); // đóng dialog
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                OtpScreen(email: email.text),
+                                          ),
+                                        );
+                                      },
+                                      child: Text('Activate Now'),
+                                    ),
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                       );
                     }
-
-                    // await Authentication()
-                    //     .Login(email: email.text, password: password.text);
                   },
             child: Container(
               alignment: Alignment.center,

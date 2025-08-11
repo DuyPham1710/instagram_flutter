@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:instagram_flutter/dto/verify_account_dto.dart';
+import 'package:instagram_flutter/providers/auth_provider.dart';
+import 'package:instagram_flutter/screens/auth/login_screen.dart';
+import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 
 class OtpScreen extends StatefulWidget {
   final String email;
@@ -12,8 +17,16 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
+  late AuthProvider authProvider;
+
   String otpCode = '';
   bool isLoading = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    authProvider = context.read<AuthProvider>();
+  }
 
   final defaultPinTheme = PinTheme(
     width: 50.w,
@@ -29,14 +42,36 @@ class _OtpScreenState extends State<OtpScreen> {
     ),
   );
 
-  void verifyOtp() {
+  void verifyOtp() async {
     if (otpCode.length == 6) {
       setState(() => isLoading = true);
-      // TODO: Gọi API verify OTP
-      Future.delayed(const Duration(seconds: 2), () {
-        setState(() => isLoading = false);
-        // Nếu thành công thì điều hướng sang trang tiếp theo
-      });
+
+      //  final authProvider = context.read<AuthProvider>();
+      final result = await authProvider.verifyUser(
+        VerifyAccountDto(email: widget.email, otp: otpCode),
+      );
+
+      if (!mounted) return;
+
+      if (result == null) {
+        showDialogSuccess();
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Verification Failed'),
+
+            content: Text(result ?? 'Unknown error'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+      setState(() => isLoading = false);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: const Text('Please enter a valid 6-digit code')),
@@ -44,10 +79,66 @@ class _OtpScreenState extends State<OtpScreen> {
     }
   }
 
-  void resendOtp() {
-    // TODO: Gọi API gửi lại OTP
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('OTP has been resent to ${widget.email}')),
+  void resendOtp() async {
+    setState(() => isLoading = true);
+    final message = await authProvider.resendOtp(widget.email);
+
+    if (message != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to resend OTP')));
+    }
+    setState(() => isLoading = false);
+  }
+
+  Future<dynamic> showDialogSuccess() {
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop(); // đóng dialog
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => LoginScreen()),
+            (route) => false, // Xóa toàn bộ stack để tránh quay lại OTP
+          );
+        });
+
+        return Dialog(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Lottie.asset(
+                  'animations/success.json',
+                  width: 120,
+                  height: 120,
+                  repeat: false,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Verification Successful!",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green[700],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -92,30 +183,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
               SizedBox(height: 30.h),
 
-              // Verify Button
-              SizedBox(
-                width: double.infinity,
-                height: 48.h,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                  ),
-                  onPressed: isLoading ? null : verifyOtp,
-                  child: isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : Text(
-                          "Verify",
-                          style: TextStyle(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                ),
-              ),
+              VerifyButton(),
 
               SizedBox(height: 20.h),
 
@@ -143,6 +211,32 @@ class _OtpScreenState extends State<OtpScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  SizedBox VerifyButton() {
+    return SizedBox(
+      width: double.infinity,
+      height: 48.h,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+        ),
+        onPressed: isLoading ? null : verifyOtp,
+        child: isLoading
+            ? const CircularProgressIndicator(color: Colors.white)
+            : Text(
+                "Verify",
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
       ),
     );
   }

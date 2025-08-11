@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:instagram_flutter/dto/create_user_dto.dart';
+import 'package:instagram_flutter/providers/auth_provider.dart';
 import 'package:instagram_flutter/screens/auth/otp_screen.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -138,25 +141,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         alignment: Alignment.center,
         children: [
           InkWell(
-            onTap: _isLoading
-                ? null
-                : () {
-                    setState(() {
-                      _isLoading = true;
-                    });
+            onTap: _isLoading ? null : _handleSignUp,
 
-                    Future.delayed(const Duration(seconds: 2), () {
-                      setState(() => _isLoading = false);
-                    });
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            OtpScreen(email: email.text.trim()),
-                      ),
-                    );
-                  },
             child: Container(
               alignment: Alignment.center,
               width: double.infinity,
@@ -228,5 +214,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _handleSignUp() async {
+    setState(() => _isLoading = true);
+
+    final dto = CreateUserDto(
+      fullName: fullName.text.trim(),
+      email: email.text.trim(),
+      username: username.text.trim(),
+      password: password.text.trim(),
+    );
+
+    final authProvider = context.read<AuthProvider>();
+
+    final errorMessage = await authProvider.register(dto);
+
+    if (!mounted) return;
+
+    if (errorMessage == null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => OtpScreen(email: dto.email)),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Registration Failed'),
+          content: Text(errorMessage),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    setState(() => _isLoading = false);
   }
 }

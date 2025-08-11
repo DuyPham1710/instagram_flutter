@@ -29,7 +29,7 @@ class ProfileInfoState extends State<ProfileInfo> {
             radius: 50.h,
             backgroundImage: NetworkImage(
               user?.avatarUrl ??
-                  'https://i.pinimg.com/736x/3d/54/a3/3d54a3afe927891ec41fec08f2c563d8.jpg',
+                  'https://cdn.shopify.com/s/files/1/0086/0795/7054/files/Golden-Retriever.jpg?v=1645179525',
             ),
           ),
 
