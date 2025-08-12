@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/dto/toggle_like_dto.dart';
 import 'package:instagram_flutter/dto/toggle_save_post_dto.dart';
+import 'package:instagram_flutter/models/Comment.dart';
 import 'package:instagram_flutter/models/Like.dart';
 import 'package:instagram_flutter/models/Post.dart';
 import 'package:instagram_flutter/models/SavePost.dart';
@@ -153,5 +154,14 @@ class PostProvider extends ChangeNotifier {
     } catch (e) {
       print('Failed to fetch liked posts: $e');
     }
+  }
+
+  void addCommentByPostId(int postId, Comment comment) {
+    for (var post in _postsFollowing) {
+      if (post.postId == postId) {
+        post.comments.add(comment);
+      }
+    }
+    notifyListeners();
   }
 }

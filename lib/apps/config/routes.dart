@@ -34,4 +34,7 @@ class Routes {
   // Api paths for save posts
   static const String getSavedPosts = '/save-post/get-saved-posts';
   static const String savePost = '/save-post/toggle-save-post';
+
+  // Api paths for comments
+  static const String createComment = '/comment';
 }

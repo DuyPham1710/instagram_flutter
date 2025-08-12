@@ -41,7 +41,7 @@ class SuggestItem extends StatelessWidget {
                 SizedBox(height: 12.h),
 
                 Text(
-                  user.fullName ?? '',
+                  user.fullName,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13.sp,

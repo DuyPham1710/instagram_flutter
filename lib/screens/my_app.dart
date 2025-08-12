@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:instagram_flutter/screens/auth/login_screen.dart';
 import 'package:instagram_flutter/screens/intro.dart';
 
 class MyApp extends StatefulWidget {
@@ -21,10 +20,6 @@ class _MyAppState extends State<MyApp> {
         return MaterialApp(debugShowCheckedModeBanner: false, home: child);
       },
       child: Intro(),
-      // child: LoginScreen(),
-      //   child: BottomNavigation(
-      // child: HomeScreen(),
-      //),
     );
   }
 }

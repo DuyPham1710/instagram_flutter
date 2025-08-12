@@ -7,7 +7,6 @@ import 'package:instagram_flutter/screens/profile/widget/profile_header.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_info.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_story.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_suggest.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_tabs.dart';
 import 'package:provider/provider.dart';
 

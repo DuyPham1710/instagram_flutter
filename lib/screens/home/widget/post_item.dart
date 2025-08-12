@@ -175,19 +175,26 @@ class PostItem extends StatelessWidget {
                     child: Text('${posts[index].likeCount}'),
                   ),
                   SizedBox(width: 10.w),
-                  Icon(CupertinoIcons.chat_bubble),
-                  SizedBox(width: 6.w),
                   GestureDetector(
                     onTap: () {
                       showModalBottomSheet(
                         isScrollControlled: true,
                         context: context,
                         builder: (BuildContext context) {
-                          return ModalComment();
+                          return ModalComment(
+                            postId: posts[index].postId,
+                            comments: posts[index].comments,
+                          );
                         },
                       );
                     },
-                    child: Text('14'),
+                    child: Row(
+                      children: [
+                        Icon(CupertinoIcons.chat_bubble),
+                        SizedBox(width: 6.w),
+                        Text('${posts[index].comments.length}'),
+                      ],
+                    ),
                   ),
                   SizedBox(width: 10.w),
                   Icon(CupertinoIcons.paperplane),

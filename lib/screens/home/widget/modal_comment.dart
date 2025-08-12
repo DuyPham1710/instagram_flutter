@@ -1,9 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:instagram_flutter/dto/create_comment_dto.dart';
+import 'package:instagram_flutter/dto/user_response_dto.dart';
+import 'package:instagram_flutter/models/Comment.dart';
+import 'package:instagram_flutter/providers/comment_provider.dart';
+import 'package:instagram_flutter/providers/post_provider.dart';
+import 'package:instagram_flutter/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class ModalComment extends StatefulWidget {
-  const ModalComment({super.key});
+  final int postId;
+  final List<Comment> comments;
+
+  const ModalComment({super.key, required this.postId, required this.comments});
 
   @override
   State<ModalComment> createState() => _ModalCommentState();
@@ -71,7 +81,7 @@ class _ModalCommentState extends State<ModalComment> {
               Expanded(
                 child: ListView.builder(
                   controller: scrollController,
-                  itemCount: 5,
+                  itemCount: widget.comments.length,
                   itemBuilder: (context, index) {
                     return Container(
                       padding: EdgeInsets.fromLTRB(12.w, 12.h, 4.w, 16.h),
@@ -81,7 +91,8 @@ class _ModalCommentState extends State<ModalComment> {
                           CircleAvatar(
                             radius: 20.r,
                             backgroundImage: NetworkImage(
-                              'https://i.pinimg.com/736x/8b/28/8d/8b288dbd8cb07d0f85adc8bdd7006ecc.jpg',
+                              widget.comments[index].user.avatarUrl ??
+                                  'https://i.pinimg.com/736x/8b/28/8d/8b288dbd8cb07d0f85adc8bdd7006ecc.jpg',
                             ),
                           ),
 
@@ -92,7 +103,7 @@ class _ModalCommentState extends State<ModalComment> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'User Name',
+                                  widget.comments[index].user.username,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14.sp,
@@ -102,7 +113,7 @@ class _ModalCommentState extends State<ModalComment> {
                                 SizedBox(height: 4.h),
 
                                 Text(
-                                  'This is a comment',
+                                  widget.comments[index].content,
                                   style: TextStyle(
                                     fontSize: 15.sp,
                                     color: Colors.black,
@@ -177,6 +188,7 @@ class _ModalCommentState extends State<ModalComment> {
   }
 
   Widget _buildCommentInput(BuildContext context) {
+    final userProfile = context.watch<UserProvider>().user;
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(
@@ -192,7 +204,8 @@ class _ModalCommentState extends State<ModalComment> {
           CircleAvatar(
             radius: 18.r,
             backgroundImage: NetworkImage(
-              'https://i.pinimg.com/736x/8b/28/8d/8b288dbd8cb07d0f85adc8bdd7006ecc.jpg',
+              userProfile?.avatarUrl ??
+                  'https://i.pinimg.com/736x/8b/28/8d/8b288dbd8cb07d0f85adc8bdd7006ecc.jpg',
             ),
           ),
           SizedBox(width: 10.w),
@@ -221,8 +234,30 @@ class _ModalCommentState extends State<ModalComment> {
               CupertinoIcons.arrow_up_circle_fill,
               color: Colors.blueAccent,
             ),
-            onPressed: () {
-              // Gửi comment
+            onPressed: () async {
+              if (_controller.text.isNotEmpty) {
+                final commentProvider = context.read<CommentProvider>();
+                final postProvider = context.read<PostProvider>();
+
+                final newComment = await commentProvider.createComment(
+                  CreateCommentDto(
+                    content: _controller.text,
+                    postId: widget.postId,
+                  ),
+                );
+
+                if (newComment == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to create comment')),
+                  );
+                  return;
+                }
+                postProvider.addCommentByPostId(widget.postId, newComment);
+
+                // Clear the input field
+                _controller.clear();
+                _focusNode.unfocus();
+              }
             },
           ),
         ],
