@@ -4,9 +4,7 @@ import 'package:instagram_flutter/apps/config/dio_client.dart';
 import 'package:instagram_flutter/dto/ApiResponse.dart';
 import 'package:instagram_flutter/dto/create_user_dto.dart';
 import 'package:instagram_flutter/dto/login_dto.dart';
-import 'package:instagram_flutter/dto/user_response_dto.dart';
 import 'package:instagram_flutter/dto/verify_account_dto.dart';
-import 'package:instagram_flutter/models/User.dart';
 import 'package:instagram_flutter/repositories/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

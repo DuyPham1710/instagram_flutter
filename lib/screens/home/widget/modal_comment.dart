@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_flutter/dto/create_comment_dto.dart';
-import 'package:instagram_flutter/dto/user_response_dto.dart';
 import 'package:instagram_flutter/models/Comment.dart';
 import 'package:instagram_flutter/providers/comment_provider.dart';
 import 'package:instagram_flutter/providers/post_provider.dart';
