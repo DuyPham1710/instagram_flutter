@@ -22,154 +22,167 @@ class ProfileInfoState extends State<ProfileInfo> {
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 50.h,
-            backgroundImage: NetworkImage(
-              user?.avatarUrl ??
-                  'https://cdn.shopify.com/s/files/1/0086/0795/7054/files/Golden-Retriever.jpg?v=1645179525',
-            ),
-          ),
-
-          SizedBox(width: 20.w),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  user?.fullName ?? 'Unknown',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 50.h,
+                backgroundImage: NetworkImage(
+                  user?.avatarUrl ??
+                      'https://cdn.shopify.com/s/files/1/0086/0795/7054/files/Golden-Retriever.jpg?v=1645179525',
                 ),
+              ),
 
-                SizedBox(height: 8.h),
+              SizedBox(width: 20.w),
 
-                Row(
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PostScreen(
-                              posts: context.read<PostProvider>().posts,
-                              selectedPostIndex: 0,
-                            ),
-                          ),
-                        );
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Consumer<PostProvider>(
-                            builder: (context, postProvider, child) {
-                              return Text(
-                                '${postProvider.posts.length}',
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              );
-                            },
-                          ),
-
-                          SizedBox(height: 4.h),
-
-                          Text(
-                            'bài viết',
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                    Text(
+                      user?.fullName ?? 'Unknown',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
 
-                    SizedBox(width: 14.w),
+                    SizedBox(height: 8.h),
 
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => FollowScreen(initialTabIndex: 0),
-                          ),
-                        );
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Consumer<FollowProvider>(
-                            builder: (context, followProvider, child) {
-                              return Text(
-                                '${followProvider.followers.length}',
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PostScreen(
+                                  posts: context.read<PostProvider>().posts,
+                                  selectedPostIndex: 0,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Consumer<PostProvider>(
+                                builder: (context, postProvider, child) {
+                                  return Text(
+                                    '${postProvider.posts.length}',
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                },
+                              ),
+
+                              SizedBox(height: 4.h),
+
+                              Text(
+                                'bài viết',
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
-                              );
-                            },
+                              ),
+                            ],
                           ),
+                        ),
 
-                          SizedBox(height: 4.h),
+                        SizedBox(width: 14.w),
 
-                          Text(
-                            'người theo dõi',
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    FollowScreen(initialTabIndex: 0),
+                              ),
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Consumer<FollowProvider>(
+                                builder: (context, followProvider, child) {
+                                  return Text(
+                                    '${followProvider.followers.length}',
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                },
+                              ),
 
-                    SizedBox(width: 14.w),
+                              SizedBox(height: 4.h),
 
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => FollowScreen(initialTabIndex: 1),
-                          ),
-                        );
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Consumer<FollowProvider>(
-                            builder: (context, followProvider, child) {
-                              return Text(
-                                '${followProvider.following.length}',
+                              Text(
+                                'người theo dõi',
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
-                              );
-                            },
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 4.h),
-                          Text(
-                            'đang theo dõi',
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        ),
+
+                        SizedBox(width: 14.w),
+
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    FollowScreen(initialTabIndex: 1),
+                              ),
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Consumer<FollowProvider>(
+                                builder: (context, followProvider, child) {
+                                  return Text(
+                                    '${followProvider.following.length}',
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 4.h),
+                              Text(
+                                'đang theo dõi',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
+
+          SizedBox(height: 10.h),
+          Text(
+            user?.bio ?? '',
+            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
           ),
         ],
       ),

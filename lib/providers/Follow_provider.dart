@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/dto/ApiResponse.dart';
+import 'package:instagram_flutter/dto/toggle_follow_dto.dart';
 import 'package:instagram_flutter/models/Follow.dart';
 import 'package:instagram_flutter/repositories/follow_repository.dart';
 
@@ -14,6 +17,28 @@ class FollowProvider extends ChangeNotifier {
   List<Follow> get following => _following;
 
   FollowProvider({required this.followRepository});
+
+  Future<String?> toggleFollow(ToggleFollowDto toggleFollowDto) async {
+    try {
+      final response = await followRepository.toggleFollow(toggleFollowDto);
+      notifyListeners();
+      return null;
+    } on DioException catch (e) {
+      //   print('>>> check ${e.response}');
+      // Nếu API có trả message
+      if (e.response?.data != null) {
+        try {
+          final apiResponse = ApiResponse.fromJson(e.response!.data);
+          return apiResponse.message;
+        } catch (_) {
+          return e.response?.data.toString();
+        }
+      }
+      return "Server error";
+    } catch (e) {
+      return "Unknown error occurred";
+    }
+  }
 
   Future<List<Follow>> fetchFollowersByUserId(int userId) async {
     try {

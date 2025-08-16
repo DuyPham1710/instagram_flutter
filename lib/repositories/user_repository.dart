@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:instagram_flutter/dto/update_user_dto.dart';
 import 'package:instagram_flutter/dto/user_response_dto.dart';
 import 'package:instagram_flutter/services/api/user_api_service.dart';
 
@@ -26,5 +29,17 @@ class UserRepository {
     return (response.data as List)
         .map((user) => UserResponseDto.fromJson(user))
         .toList();
+  }
+
+  Future<UserResponseDto> updateUserProfile(
+    UpdateUserDto data, {
+    File? avatarFile,
+  }) async {
+    final response = await userApiService.updateProfile(
+      data,
+      avatarFile: avatarFile,
+    );
+
+    return UserResponseDto.fromJson(response.data);
   }
 }

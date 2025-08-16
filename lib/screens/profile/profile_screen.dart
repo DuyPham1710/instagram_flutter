@@ -47,12 +47,18 @@ class _ProfileScreen extends State<ProfileScreen> {
                 return ProfileInfo(user: userProvider.user);
               },
             ),
-            ProfileActions(
-              toggleSuggest: () {
-                isShowSuggest.value = !isShowSuggest.value;
+            Consumer<UserProvider>(
+              builder: (context, userProvider, child) {
+                return ProfileActions(
+                  toggleSuggest: () {
+                    isShowSuggest.value = !isShowSuggest.value;
+                  },
+                  isShowSuggest: isShowSuggest,
+                  user: userProvider.user,
+                );
               },
-              isShowSuggest: isShowSuggest,
             ),
+
             ValueListenableBuilder<bool>(
               valueListenable: isShowSuggest,
               builder: (context, show, _) {

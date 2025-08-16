@@ -142,6 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 title: Text('Login Failed'),
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(errorMessage),
                                     if (isDialogLoading) ...[

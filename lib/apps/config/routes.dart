@@ -22,6 +22,7 @@ class Routes {
   // Api paths for follow
   static const String getFollowers = '/follow/get-followers';
   static const String getFollowing = '/follow/get-following';
+  static const String toggleFollow = '/follow/toggle-follow';
   static String getFollowersByUserId(int userId) =>
       '/follow/get-followers/$userId';
   static String getFollowingByUserId(int userId) =>

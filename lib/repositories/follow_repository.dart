@@ -1,3 +1,4 @@
+import 'package:instagram_flutter/dto/toggle_follow_dto.dart';
 import 'package:instagram_flutter/models/Follow.dart';
 import 'package:instagram_flutter/services/api/follow_api_service.dart';
 
@@ -5,6 +6,12 @@ class FollowRepository {
   final FollowApiService followApiService;
 
   FollowRepository({required this.followApiService});
+
+  Future<String> toggleFollow(ToggleFollowDto toggleFollowDto) async {
+    final response = await followApiService.toggleFollow(toggleFollowDto);
+
+    return response.data['message'];
+  }
 
   Future<List<Follow>> getFollowersByUserId(int userId) async {
     final response = await followApiService.getFollowersByUserId(userId);

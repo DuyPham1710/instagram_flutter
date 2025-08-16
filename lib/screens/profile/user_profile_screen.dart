@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:instagram_flutter/dto/toggle_follow_dto.dart';
 import 'package:instagram_flutter/dto/user_response_dto.dart';
 import 'package:instagram_flutter/models/Post.dart';
+import 'package:instagram_flutter/providers/Follow_provider.dart';
 import 'package:instagram_flutter/providers/post_provider.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_info_user.dart';
 import 'package:instagram_flutter/screens/profile/widget/profile_story.dart';
@@ -30,6 +32,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = widget.user;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -60,18 +63,50 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _buildActionButton('Theo dõi', onPressed: () {}),
-                ),
-                SizedBox(width: 8.w),
-                Expanded(
-                  child: _buildActionButton('Nhắn tin', onPressed: () {}),
-                ),
-                SizedBox(width: 8.w),
-                _buildIconButton(Icons.person_add_alt_1_outlined),
-              ],
+            child: Consumer<FollowProvider>(
+              builder: (context, followProvider, child) {
+                final isFollowing = followProvider.following.any(
+                  (f) => f.following?.userId == widget.user.userId,
+                );
+
+                return Row(
+                  children: [
+                    Expanded(
+                      child: _buildActionButton(
+                        'Follow',
+                        isFollowing,
+                        onPressed: () async {
+                          //     if (!isFollowing) {
+                          final message = await followProvider.toggleFollow(
+                            ToggleFollowDto(followingId: user.userId),
+                          );
+
+                          if (message == null) {
+                            await followProvider.fetchFollowing();
+                          } else {
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(SnackBar(content: Text(message)));
+                          }
+                          //    }
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                    Expanded(
+                      child: _buildActionButton(
+                        'Message',
+                        isFollowing,
+                        onPressed: () {
+                          // Handle message button press
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                    _buildIconButton(Icons.person_add_alt_1_outlined),
+                  ],
+                );
+              },
             ),
           ),
 
@@ -96,22 +131,26 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  Widget _buildActionButton(String text, {required VoidCallback onPressed}) {
+  Widget _buildActionButton(
+    String text,
+    bool isFollowing, {
+    required VoidCallback onPressed,
+  }) {
     return InkWell(
       onTap: onPressed,
       child: Container(
         alignment: Alignment.center,
         height: 36.h,
         decoration: BoxDecoration(
-          color: text == 'Theo dõi' ? Colors.blueAccent : Colors.grey[100],
+          color: isFollowing ? Colors.grey : Colors.blueAccent,
           borderRadius: BorderRadius.circular(6.r),
         ),
         child: Text(
-          text,
+          text == 'Message' ? text : (isFollowing ? 'Following' : text),
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.bold,
-            color: text == 'Theo dõi' ? Colors.white : Colors.black,
+            color: text == 'Follow' ? Colors.white : Colors.black,
           ),
         ),
       ),
