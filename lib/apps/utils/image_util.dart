@@ -14,4 +14,13 @@ class ImageUtil {
     }
     return null;
   }
+
+  static Future<List<XFile>?> pickImages() async {
+    final List<XFile> selectedImages = await _picker.pickMultiImage();
+
+    if (selectedImages.isNotEmpty) {
+      return selectedImages;
+    }
+    return null;
+  }
 }

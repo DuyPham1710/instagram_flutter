@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:instagram_flutter/providers/user_provider.dart';
+import 'package:instagram_flutter/screens/profile/widget/modal_create.dart';
 import 'package:provider/provider.dart';
 
 class ProfileHeader extends StatelessWidget {
@@ -49,7 +50,15 @@ class ProfileHeader extends StatelessWidget {
                       size: 24.h,
                       color: Colors.black,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ModalCreate();
+                        },
+                      );
+                    },
                   ),
                   IconButton(
                     padding: EdgeInsets.only(left: 15.w),
